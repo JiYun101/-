@@ -1,6 +1,7 @@
 package com.msb.club_management.controller;
 
 import com.msb.club_management.service.UsersService;
+import com.msb.club_management.utils.Md5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -101,6 +102,10 @@ public class UsersController extends BaseController {
             // 初始化用户ID和设置创建时间
             users.setId(IDUtils.makeIDByCurrent());
             users.setCreateTime(DateUtils.getNowDate());
+
+            // 对密码进行加密
+            String encryptedPassword = Md5Util.encode(users.getPassWord());
+            users.setPassWord(encryptedPassword);
 
             // 记录添加用户的操作日志
             Log.info("添加系统用户，传入参数：{}", users);

@@ -2,6 +2,7 @@ package com.msb.club_management.controller;
 
 import com.msb.club_management.service.UsersService;
 import com.msb.club_management.utils.DateUtils;
+import com.msb.club_management.utils.Md5Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,9 +97,12 @@ public class IndexController extends BaseController {
             // 如果用户不存在，则返回错误信息
             return R.error("输入的用户名不存在");
         }else {
-            // 验证用户输入的密码是否正确
-            if(passWord.equals(user.getPassWord().trim())) {
-                // 登录成功，生成并返回令牌
+
+            //对用户输入的密码进行加密处理（与注册时相同的加密方式）
+            String encryptedPassWord = Md5Util.encode(passWord);
+
+            //将加密后的密码与数据库中存储的加密密码进行比较
+            if(encryptedPassWord.equals(user.getPassWord().trim())) {
                 String token = IDUtils.makeIDByUUID();
                 cacheHandle.addUserCache(token, user.getId());
                 return R.success("登录成功", token);
