@@ -158,6 +158,7 @@ public class IndexController extends BaseController {
         Log.info("修改用户信息，{}", user);
 
         user.setUpdateTime(DateUtils.getNowDate());
+        user.setPassWord(Md5Util.encode(user.getPassWord()));
         // 调用服务层方法，更新用户信息
         usersService.update(user);
         // 返回操作成功的响应
@@ -202,7 +203,7 @@ public class IndexController extends BaseController {
 
         // 根据token获取用户信息，并更新密码
         Users user = usersService.getOne(cacheHandle.getUserInfoCache(token));
-        user.setPassWord(password);
+        user.setPassWord(Md5Util.encode(password));
         usersService.update(user);
 
         // 返回操作成功的响应
