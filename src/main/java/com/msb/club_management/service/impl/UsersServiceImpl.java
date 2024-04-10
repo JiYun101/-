@@ -126,6 +126,11 @@ public class UsersServiceImpl implements UsersService {
         return parsePage(page);
     }
 
+    @Override
+    public Users selectUser(String userInfoCache) {
+        Users users = usersDao.selectById(userInfoCache);
+        return users;
+    }
 
     /**
      * 转化分页查询的结果

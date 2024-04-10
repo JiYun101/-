@@ -37,6 +37,7 @@ public interface MembersDao extends BaseMapper<Members> {
             "<if test='userName != null and userName.trim() != &quot;&quot; '>" +
             "AND u.name LIKE CONCAT('%', #{userName}, '%') " +
             "</if>" +
+            "AND M.state=1"+
             "</where>" +
             "ORDER BY m.create_time DESC" +
             "</script>")

@@ -2,15 +2,13 @@ package com.msb.club_management.controller;
 
 import com.msb.club_management.service.UsersService;
 import com.msb.club_management.utils.Md5Util;
+import com.msb.club_management.utils.PhoneUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import com.msb.club_management.utils.DateUtils;
 import com.msb.club_management.utils.IDUtils;
@@ -18,6 +16,9 @@ import com.msb.club_management.msg.R;
 import com.msb.club_management.msg.PageData;
 
 import com.msb.club_management.vo.Users;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * 系统请求响应控制器
@@ -31,6 +32,8 @@ public class UsersController extends BaseController {
 
     @Autowired
     private UsersService usersService;
+
+
 
     /**
      * 处理根路径的请求，重定向到用户页面。
@@ -102,7 +105,10 @@ public class UsersController extends BaseController {
             // 初始化用户ID和设置创建时间
             users.setId(IDUtils.makeIDByCurrent());
             users.setCreateTime(DateUtils.getNowDate());
-
+            //对手机号码进行校验
+            if (PhoneUtil.isMobile(users.getPhone())!=true){
+                return R.warn("手机号码格式错误");
+            }
             // 对密码进行加密
             String encryptedPassword = Md5Util.encode(users.getPassWord());
             users.setPassWord(encryptedPassword);
