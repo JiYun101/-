@@ -177,6 +177,7 @@ public class IndexController extends BaseController {
     public R checkPwd(String oldPwd, String token) {
         // 根据用户令牌获取用户信息
         Users user = usersService.getOne(cacheHandle.getUserInfoCache(token));
+        oldPwd = Md5Util.encode(oldPwd);
         // 检查输入的原密码是否与记录中的密码一致
         if(oldPwd.equals(user.getPassWord())) {
             // 返回密码校验成功的消息
