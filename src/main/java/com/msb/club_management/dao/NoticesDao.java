@@ -2,6 +2,7 @@ package com.msb.club_management.dao;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.msb.club_management.vo.Notices;
+import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -77,6 +78,7 @@ public interface NoticesDao extends BaseMapper<Notices> {
             "<if test='title != null and title.trim() != &quot;&quot; '>" +
             "AND n.title LIKE CONCAT('%', #{title}, '%') " +
             "</if>" +
+            "AND n.state=1"+
             "</where>" +
             "ORDER BY n.create_time DESC " +
             "</script>")
@@ -111,4 +113,7 @@ public interface NoticesDao extends BaseMapper<Notices> {
                                                  @Param("userId") String userId,
                                                  @Param("title") String title,
                                                  @Param("teamName") String teamName);
+
+    /*@Insert("<script>" +)
+    public static int insert(Notices notices);*/
 }

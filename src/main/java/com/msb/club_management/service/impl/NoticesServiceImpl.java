@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import com.msb.club_management.dao.TeamsDao;
@@ -14,13 +16,11 @@ import com.msb.club_management.dao.NoticesDao;
 import com.msb.club_management.service.NoticesService;
 import com.msb.club_management.utils.StringUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service("noticesService")
 public class NoticesServiceImpl implements NoticesService {
+
 
     @Autowired
     private NoticesDao noticesDao;
@@ -31,6 +31,7 @@ public class NoticesServiceImpl implements NoticesService {
     @Override
     @Transactional
     public void add(Notices notices) {
+
 
         noticesDao.insert(notices);
     }
@@ -89,6 +90,7 @@ public class NoticesServiceImpl implements NoticesService {
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PageData getPageAll(Long pageIndex, Long pageSize, String title, String teamName){
 
+
         Page<Map<String, Object>>  page =
                 noticesDao.qryPageAll(new Page<Map<String, Object>>(pageIndex, pageSize), title, teamName);
 
@@ -104,6 +106,20 @@ public class NoticesServiceImpl implements NoticesService {
 
         return parsePage(page);
     }
+
+    /**
+     * 添加通知信息
+     * @param notices
+     */
+   /* @Override
+    public  void addNotice(Notices notices) {
+        // 设置通知信息的创建时间为当前时间的字符串表示
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        notices.setCreateTime(sdf.format(new Date()));
+
+        // 调用 MyBatis-Plus 提供的通用 Mapper 保存通知信息到数据库
+        NoticesDao.insert(notices);
+    }*/
 
     /**
      * 查询列表结果转换
@@ -148,4 +164,6 @@ public class NoticesServiceImpl implements NoticesService {
 
         return pageData;
     }
+
+
 }

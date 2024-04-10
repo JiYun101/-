@@ -52,4 +52,9 @@ public interface NoticesService extends BaseService<Notices, String> {
 	 * @return
 	 */
 	public PageData getPageById(Long pageIndex, Long pageSize, String userId, String title, String teamName);
+
+	/**
+	 * 添加通知记录
+	 */
+    /*void addNotice(Notices notices);*/
 }

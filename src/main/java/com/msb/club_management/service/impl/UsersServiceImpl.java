@@ -83,37 +83,49 @@ public class UsersServiceImpl implements UsersService {
         return user;
     }
 
+    /**
+     * 获取用户信息的分页数据。
+     *
+     * @param pageIndex 请求的页码。
+     * @param pageSize 每页显示的数据条数。
+     * @param users 包含用户搜索条件的对象，可包含用户名、真实姓名和电话。
+     * @return 返回经过处理的分页数据对象，包含用户信息。
+     */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public PageData getPageInfo(Long pageIndex, Long pageSize, Users users) {
 
         QueryWrapper<Users> qw = new QueryWrapper<Users>();
 
+        // 根据用户名进行查询
         if (StringUtils.isNotNullOrEmpty(users.getUserName())) {
-
             qw.like("user_name", users.getUserName());
         }
 
+        // 根据真实姓名进行查询
         if (StringUtils.isNotNullOrEmpty(users.getName())) {
-
             qw.like("name", users.getName());
         }
 
+        // 根据电话进行查询
         if (StringUtils.isNotNullOrEmpty(users.getPhone())) {
-
             qw.like("phone", users.getPhone());
         }
 
+        // 按照创建时间倒序排列
         qw.orderByDesc("create_time");
 
-        // 只查询正常的用户
+        // 只查询状态为正常的用户
         qw.like("status", 1);
 
+        // 执行分页查询
         Page<Users> page =
                 usersDao.selectPage(new Page<Users>(pageIndex, pageSize), qw);
 
+        // 解析并返回分页数据
         return parsePage(page);
     }
+
 
     /**
      * 转化分页查询的结果
