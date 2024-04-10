@@ -34,4 +34,6 @@ public interface UsersService extends BaseService<Users, String> {
 	 * @return
 	 */	
 	public PageData getPageInfo(Long pageIndex, Long pageSize, Users users);
+
+
 }

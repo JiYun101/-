@@ -157,7 +157,9 @@ public class UsersController extends BaseController {
             // 获取用户信息
             Users users = usersService.getOne(id);
             // 执行删除操作
-            usersService.delete(users);
+            users.setStatus(0);
+            users.setUpdateTime(DateUtils.getNowDate());
+            usersService.update(users);
             // 返回删除成功的结果
             return R.success();
         }else{

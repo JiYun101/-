@@ -106,6 +106,9 @@ public class UsersServiceImpl implements UsersService {
 
         qw.orderByDesc("create_time");
 
+        // 只查询正常的用户
+        qw.like("status", 1);
+
         Page<Users> page =
                 usersDao.selectPage(new Page<Users>(pageIndex, pageSize), qw);
 
