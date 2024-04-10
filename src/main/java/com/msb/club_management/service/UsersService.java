@@ -36,4 +36,5 @@ public interface UsersService extends BaseService<Users, String> {
 	public PageData getPageInfo(Long pageIndex, Long pageSize, Users users);
 
 
+	Users selectUser(String userInfoCache);
 }
