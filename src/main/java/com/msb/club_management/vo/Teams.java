@@ -57,6 +57,7 @@ public class Teams implements Serializable {
 	@TableField(value = "state")
 	private String state;
 
+
 	public String getUpdateTime() {
 		return updateTime;
 	}
