@@ -105,6 +105,7 @@ public class UsersController extends BaseController {
             // 初始化用户ID和设置创建时间
             users.setId(IDUtils.makeIDByCurrent());
             users.setCreateTime(DateUtils.getNowDate());
+            users.setUpdateTime(DateUtils.getNowDate());
             //对手机号码进行校验
             if (PhoneUtil.isMobile(users.getPhone())!=true){
                 return R.warn("手机号码格式错误");
@@ -139,10 +140,9 @@ public class UsersController extends BaseController {
     public R updInfo(Users users) {
         // 记录日志，打印更新用户信息的参数
         Log.info("修改系统用户，传入参数：{}", users);
-
+        users.setUpdateTime(DateUtils.getNowDate());
         // 调用服务层方法，执行用户信息更新
         usersService.update(users);
-
         // 返回操作成功的标识
         return R.success();
     }

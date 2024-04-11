@@ -8,6 +8,7 @@ import com.msb.club_management.service.NoticesService;
 import com.msb.club_management.service.UsersService;
 import com.msb.club_management.utils.DateUtils;
 import com.msb.club_management.utils.IDUtils;
+import com.msb.club_management.utils.StringUtils;
 import com.msb.club_management.vo.Notices;
 import com.msb.club_management.vo.Users;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,10 @@ public class NoticesController extends BaseController{
         notices.setCreateTime(DateUtils.getNowDate("yyyy-MM-dd"));
         // 设置通知的状态为1（代表某种状态，具体含义根据业务逻辑定）
         notices.setState("1");
+        if(StringUtils.isNullOrEmpty(notices.getTeamId())){
+
+            notices.setTeamId(null);
+        }
         // 调用服务层方法，将通知信息添加到数据库
         noticesService.add(notices);
 
