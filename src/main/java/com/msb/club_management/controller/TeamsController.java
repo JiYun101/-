@@ -67,10 +67,9 @@ public class TeamsController extends BaseController {
 
         Users user = usersService.selectUser(cacheHandle.getUserInfoCache(token));
 
-        /*if(ObjectUtils.isEmpty(user)) {
+        if(ObjectUtils.isEmpty(user)) {
             return R.error("登录信息不存在，请重新登录");
         }
-*/
         if(user.getType() == 1){
 
             teams.setManager(user.getId());
