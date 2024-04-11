@@ -206,6 +206,7 @@ public class IndexController extends BaseController {
         // 根据token获取用户信息，并更新密码
         Users user = usersService.getOne(cacheHandle.getUserInfoCache(token));
         user.setPassWord(Md5Util.encode(password));
+        user.setUpdateTime(DateUtils.getNowDate());
         usersService.update(user);
 
         // 返回操作成功的响应
