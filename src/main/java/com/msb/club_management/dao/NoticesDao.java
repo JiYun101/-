@@ -39,11 +39,9 @@ public interface NoticesDao extends BaseMapper<Notices> {
      */
     @Select("<script>" +
             "SELECT " +
-            "id, title, detail, create_time createTime, team_id teamId " +
-            "FROM notices " +
-            "WHERE team_id IN (SELECT team_id FROM members WHERE user_id = #{memId}) OR team_id IS NULL " +
-            "AND state=1 "+
-            "ORDER BY create_time DESC " +
+            "s1.id, s1.title, detail, s1.create_time createTime, s1.team_id teamId  " +
+            "FROM ( SELECT * FROM notices WHERE team_id IN ( SELECT team_id FROM members WHERE user_id = #{memId} ) OR team_id IS NULL ORDER BY create_time DESC ) s1  " +
+            "WHERE  state=1 "+
             "</script>")
     public List<Notices> qryManNotices(String manId);
 
@@ -54,11 +52,9 @@ public interface NoticesDao extends BaseMapper<Notices> {
      */
     @Select("<script>" +
             "SELECT " +
-            "id, title, detail, create_time createTime, team_id teamId " +
-            "FROM notices " +
-            "WHERE team_id IN (SELECT team_id FROM members WHERE user_id = #{memId}) OR team_id IS NULL " +
-            "AND state=1 "+
-            "ORDER BY create_time DESC " +
+            "s1.id, s1.title, detail, s1.create_time createTime, s1.team_id teamId  " +
+            "FROM ( SELECT * FROM notices WHERE team_id IN ( SELECT team_id FROM members WHERE user_id = #{memId} ) OR team_id IS NULL ORDER BY create_time DESC ) s1  " +
+            "WHERE  state=1 "+
             "</script>")
     public List<Notices> qryMemNotices(String memId);
 
