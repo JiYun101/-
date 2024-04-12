@@ -49,6 +49,7 @@ public class ApplyLogsController extends BaseController{
     @GetMapping("/info")
     @ResponseBody
     public R getInfo(String id){
+
         // 记录查询操作日志
         Log.info("查找指定申请记录，ID:{}",id);
         // 根据ID查询申请记录
@@ -67,12 +68,14 @@ public class ApplyLogsController extends BaseController{
      * @param userName 查询条件中的用户姓名，可模糊查询
      * @return 返回申请记录的信息页面，封装在R对象中。如果用户不存在，返回错误信息。
      */
+    @ResponseBody
+    @GetMapping("/page")
     public R getInfos(Long pageIndex,Long pageSize,String token,String teamName,String userName){
         // 根据token获取用户信息
         Users user=usersService.getOne(cacheHandle.getUserInfoCache(token));
         // 验证用户信息是否存在
-        if (ObjectUtils.isEmpty(user)){
-            return R.error("登录信息不存在，请重新输入");
+        if(ObjectUtils.isEmpty(user)) {
+            return R.error("用户未登录！");
         }
         // 用户类型为0时，查询全部申请记录
         if (user.getType()==0){

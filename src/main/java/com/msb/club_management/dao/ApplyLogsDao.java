@@ -40,7 +40,7 @@ public interface ApplyLogsDao extends BaseMapper<ApplyLogs> {
             "</if>" +
             "<if test='userId != null and userId.trim() != &quot;&quot; '>" +
             "AND al.user_id = #{userId} " +
-            "</if>" +"AND status = 1 "+
+            "</if>" +
             "</where>" +
             "ORDER BY al.create_time DESC " +
             "</script>")

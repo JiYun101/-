@@ -1,6 +1,5 @@
 package com.msb.club_management.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.msb.club_management.handle.CacheHandle;
 import com.msb.club_management.msg.PageData;
 import com.msb.club_management.msg.R;
@@ -15,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,8 +68,9 @@ public class TeamsController extends BaseController {
 
         Users user = usersService.selectUser(cacheHandle.getUserInfoCache(token));
 
+        // 验证用户信息是否存在
         if(ObjectUtils.isEmpty(user)) {
-            return R.error("登录信息不存在，请重新登录");
+            return R.error("用户未登录！");
         }
         if(user.getType() == 1){
 

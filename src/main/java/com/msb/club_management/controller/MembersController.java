@@ -54,12 +54,13 @@ public class MembersController extends BaseController{
     @GetMapping("/page")
     @ResponseBody
     public R getPageInfo(Long pageIndex, Long pageSize,String token, String teamName, String userName){
-        // 根据token获取用户信息
+        // 根据令牌获取用户信息
         Users user = usersService.getOne(cacheHandle.getUserInfoCache(token));
+        // 验证用户信息是否存在
         if(ObjectUtils.isEmpty(user)) {
-            // 如果用户信息不存在，则返回错误信息
-            return R.error("登录信息不存在，请重新登录");
+            return R.error("用户未登录！");
         }
+
 
         // 根据用户类型来查询不同的页面数据
         if (user.getType()==0){

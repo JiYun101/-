@@ -57,7 +57,7 @@ public class IndexController extends BaseController {
         Users user = usersService.getOne(cacheHandle.getUserInfoCache(token));
         // 验证用户信息是否存在
         if(ObjectUtils.isEmpty(user)) {
-            return R.error("登录信息不存在，请重新登录");
+            return R.error("用户未登录！");
         }
 
         // 根据用户类型获取相应的通知列表
