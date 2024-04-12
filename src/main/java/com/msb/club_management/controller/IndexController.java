@@ -60,13 +60,14 @@ public class IndexController extends BaseController {
             return R.error("用户未登录！");
         }
 
+        Integer type = user.getType();
         // 根据用户类型获取相应的通知列表
         // 用户类型为0时，获取系统通知
-        if(user.getType() == 0){
+        if(type == 0){
             List<Notices> list = noticesService.getSysNotices();
             return R.successData(list);
         // 用户类型为1时，获取管理组通知
-        }else if(user.getType() == 1){
+        }else if(type == 1){
             List<Notices> list = noticesService.getManNotices(user.getId());
             return R.successData(list);
         // 其他类型用户，获取会员通知

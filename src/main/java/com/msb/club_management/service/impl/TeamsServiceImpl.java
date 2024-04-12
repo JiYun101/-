@@ -119,7 +119,9 @@ public PageData parsePage(Page<Teams> p) {
     return pageData;
 }
 
-
+    /**
+     * 根据管理员ID查询团队列表
+     */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<Teams> getListByManId(String manId) {
@@ -154,6 +156,8 @@ public PageData parsePage(Page<Teams> p) {
 
         qw.orderByDesc("create_time");
 
+        qw.eq("state", "1");
+
         Page<Teams> page =
                 teamsDao.selectPage(new Page<Teams>(pageIndex, pageSize), qw);
 
@@ -176,6 +180,7 @@ public PageData parsePage(Page<Teams> p) {
         member.setUserId(teams.getManager());
         member.setTeamId(teams.getId());
         member.setCreateTime(DateUtils.getNowDate());
+        member.setState("1");
         membersDao.insert(member);
 
         return 1;
@@ -184,8 +189,7 @@ public PageData parsePage(Page<Teams> p) {
     @Override
     public Integer updateTeams(Teams teams) {
         // 查询团长id是否有效
-        Integer count = usersDao.selectCount(
-                new QueryWrapper<Users>().eq("id", teams.getManager()).eq("type", 1)
+        Integer count = usersDao.selectCount(new QueryWrapper<Users>().eq("id", teams.getManager()).eq("type", 1)
         );
         if(count == 0) {
             return 0;
@@ -194,6 +198,5 @@ public PageData parsePage(Page<Teams> p) {
         update(teams);
         return 1;
     }
-
 
 }

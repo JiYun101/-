@@ -77,10 +77,13 @@ public class NoticesController extends BaseController{
         notices.setCreateTime(DateUtils.getNowDate("yyyy-MM-dd"));
         // 设置通知的状态为1（代表某种状态，具体含义根据业务逻辑定）
         notices.setState("1");
+        // 检查notices对象中的teamId是否为空或空字符串
+        // 如果是，则将其设置为null
         if(StringUtils.isNullOrEmpty(notices.getTeamId())){
 
             notices.setTeamId(null);
         }
+
         // 调用服务层方法，将通知信息添加到数据库
         noticesService.add(notices);
 
