@@ -66,7 +66,7 @@ public class MembersImpl implements MembersService {
         Page<Map<String, Object>> page =
                 membersDao.qryPageByManId(new Page<Map<String, Object>>(pageIndex,pageSize),manId, teamName, userName);
 
-        return null;
+        return parsePage(page);
     }
 
     @Override
