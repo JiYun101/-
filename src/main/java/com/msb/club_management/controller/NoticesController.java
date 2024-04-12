@@ -1,6 +1,5 @@
 package com.msb.club_management.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.msb.club_management.handle.CacheHandle;
 import com.msb.club_management.msg.PageData;
 import com.msb.club_management.msg.R;
@@ -13,6 +12,7 @@ import com.msb.club_management.vo.Notices;
 import com.msb.club_management.vo.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -41,8 +41,10 @@ public class NoticesController extends BaseController{
     public R getPageInfos(Long pageIndex, Long pageSize,String token, String title, String teamName) {
 
         Users user = usersService.getOne(cacheHandle.getUserInfoCache(token));
+
+        // 验证用户信息是否存在
         if(ObjectUtils.isEmpty(user)) {
-            return R.error("登录信息不存在，请重新登录");
+            return R.error("用户未登录！");
         }
         if (user.getType()==0){
             Log.info("分页查找活动通知，当前页码：{}，每页数据量：{}, 模糊查询，标题：{}，社团名：{}", pageIndex, pageSize, title, teamName);

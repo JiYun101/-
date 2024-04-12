@@ -9,7 +9,7 @@ public interface MembersService extends BaseService<Members, String>{
 
     PageData getPageAll(Long pageIndex, Long pageSize, String teamName, String userName);
 
-    PageData getPageMyManId(Long pageIndex, Long pageSize, String teamName, String userName);
+    PageData getPageMyManId(Long pageIndex, Long pageSize,String manId, String teamName, String userName);
 
 
     boolean isManager(String teamId, String userId);
