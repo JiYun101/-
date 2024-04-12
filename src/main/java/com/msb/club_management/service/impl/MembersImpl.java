@@ -62,7 +62,10 @@ public class MembersImpl implements MembersService {
     }
 
     @Override
-    public PageData getPageMyManId(Long pageIndex, Long pageSize, String teamName, String userName) {
+    public PageData getPageMyManId(Long pageIndex, Long pageSize, String manId,String teamName, String userName) {
+        Page<Map<String, Object>> page =
+                membersDao.qryPageByManId(new Page<Map<String, Object>>(pageIndex,pageSize),manId, teamName, userName);
+
         return null;
     }
 
