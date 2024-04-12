@@ -68,7 +68,7 @@ public class MembersController extends BaseController{
             return R.successData(page);
         }else {
             // 查询管理的成员的页面数据
-            PageData page=membersService.getPageMyManId(pageIndex,pageSize,teamName,userName);
+            PageData page=membersService.getPageMyManId(pageIndex,pageSize,user.getId(),teamName,userName);
             return R.successData(page);
         }
     }
