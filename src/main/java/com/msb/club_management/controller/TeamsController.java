@@ -60,6 +60,17 @@ public class TeamsController extends BaseController {
         return R.successData(list);
     }
 
+    @GetMapping("/man")
+    @ResponseBody
+    public R getListByManId(String manId){
+
+        Log.info("获取指定社团管理员相关的社团列表");
+
+        List<Teams> list=teamsService.getListByManId(manId);
+
+        return R.successData(list);
+    }
+
     @GetMapping("/page")
     @ResponseBody
     public R getPageInfos(Long pageIndex, Long pageSize,

@@ -5,6 +5,8 @@ import com.msb.club_management.msg.PageData;
 import com.msb.club_management.msg.R;
 import com.msb.club_management.service.ApplyLogsService;
 import com.msb.club_management.service.UsersService;
+import com.msb.club_management.utils.DateUtils;
+import com.msb.club_management.utils.IDUtils;
 import com.msb.club_management.vo.ApplyLogs;
 import com.msb.club_management.vo.Users;
 import org.slf4j.Logger;
@@ -13,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -48,6 +51,8 @@ public class ApplyLogsController extends BaseController{
         return R.successData(applyLogs);
     }
 
+    @GetMapping("/page")
+    @ResponseBody
     public R getInfos(Long pageIndex,Long pageSize,String token,String teamName,String userName){
         Users user=usersService.getOne(cacheHandle.getUserInfoCache(token));
         if (ObjectUtils.isEmpty(user)){
@@ -67,5 +72,63 @@ public class ApplyLogsController extends BaseController{
             PageData page=applyLogsService.getPageInfo(pageIndex,pageSize,user.getId(),teamName,null);
             return R.successData(page);
         }
+    }
+
+    /**
+     * 添加申请记录
+     * @param token
+     * @param applyLogs
+     * @return
+     */
+    @PostMapping("/add")
+    @ResponseBody
+    public R addInfo(String token,ApplyLogs applyLogs){
+        Users user=usersService.getOne(cacheHandle.getUserInfoCache(token));
+        if (applyLogsService.isApply(user.getId(),applyLogs.getTeamId())){
+            applyLogs.setId(IDUtils.makeIDByCurrent());
+            applyLogs.setUserId(user.getId());
+            applyLogs.setCreateTime(DateUtils.getNowDate());
+
+            Log.info("添加申请记录，传入参数：{}",applyLogs);
+
+            applyLogsService.add(applyLogs);
+
+            return R.success();
+        }else {
+            return R.warn("申请审核中，请耐心等候");
+        }
+    }
+
+    /**
+     * 修改申请记录
+     * @param applyLogs
+     * @return
+     */
+    @PostMapping("/upd")
+    @ResponseBody
+    public R updInfo(ApplyLogs applyLogs){
+
+        Log.info("添加申请记录，传入参数：{}",applyLogs);
+
+        applyLogs.setUpdateTime(DateUtils.getNowDate());
+        applyLogsService.update(applyLogs);
+
+        return R.success();
+    }
+
+    /**
+     * 删除申请记录
+     * @param id
+     * @return
+     */
+    @PostMapping("/del")
+    @ResponseBody
+    public R delInfo(String id){
+
+        ApplyLogs applyLogs=applyLogsService.getOne(id);
+
+        applyLogsService.delete(applyLogs);
+
+        return R.success();
     }
 }
