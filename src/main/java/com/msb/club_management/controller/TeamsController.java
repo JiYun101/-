@@ -86,9 +86,12 @@ public class TeamsController extends BaseController {
         return R.successData(page);
     }
 
+
     /**
      * 根据团长ID获取社团信息
      */
+    @GetMapping("/man")
+    @ResponseBody
     public R getListByManId(String manId) {
 
         Log.info("根据团长ID获取社团信息，团长ID：{}", manId);
