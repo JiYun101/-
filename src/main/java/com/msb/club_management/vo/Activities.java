@@ -1,5 +1,6 @@
 package com.msb.club_management.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
@@ -14,36 +15,44 @@ public class Activities implements Serializable {
     private String id;
 
     //活动名称
-    @TableId(value = "name")
+    @TableField(value = "name")
     private String name;
 
     //活动概述
-    @TableId(value = "comm")
+    @TableField(value = "comm")
     private String comm;
 
     //活动详情
-    @TableId(value = "detail")
+    @TableField(value = "detail")
     private String detail;
 
     //活动备注
-    @TableId(value = "ask")
+    @TableField(value = "ask")
     private String ask;
 
     //报名人数
-    @TableId(value = "total")
+    @TableField(value = "total")
     private Integer total;
 
     //活动时间
-    @TableId(value= "active_time")
+    @TableField(value= "active_time")
     private String activeTime;
 
     //发布社团
-    @TableId(value = "team_id")
+    @TableField(value = "team_id")
     private String teamId;
 
     //状态
-    @TableId(value = "state")
-    private String state;
+    @TableField(value = "status")
+    private Integer status;
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
 
     public String getId() {
         return id;
@@ -109,13 +118,6 @@ public class Activities implements Serializable {
         this.teamId = teamId;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
 
     @Override
     public String toString() {
@@ -128,7 +130,7 @@ public class Activities implements Serializable {
                 ", total=" + total +
                 ", activeTime='" + activeTime + '\'' +
                 ", teamId='" + teamId + '\'' +
-                ", state='" + state + '\'' +
+                ", status=" + status +
                 '}';
     }
 }
