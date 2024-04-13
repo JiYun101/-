@@ -146,6 +146,9 @@ public class TeamsController extends BaseController {
         if (count==0){
             return R.error("更新社团信息失败！");
         }
+        if (count==3){
+            return R.error("该用户不存在！！");
+        }
         return R.success();
     }
 
