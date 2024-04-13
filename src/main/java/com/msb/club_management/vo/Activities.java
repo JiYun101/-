@@ -10,48 +10,66 @@ import java.io.Serializable;
 public class Activities implements Serializable {
 
     private static final long serialVersionUID = 1L;
-    //记录Id
+
+    /**
+     * 记录ID
+     */
     @TableId(value = "id")
     private String id;
 
-    //活动名称
+    /**
+     * 活动名称
+     */
     @TableField(value = "name")
     private String name;
 
-    //活动概述
+    /**
+     * 活动概述
+     */
     @TableField(value = "comm")
     private String comm;
 
-    //活动详情
+    /**
+     * 活动详情
+     */
     @TableField(value = "detail")
     private String detail;
 
-    //活动备注
+    /**
+     * 活动要求
+     */
     @TableField(value = "ask")
     private String ask;
 
-    //报名人数
+    /**
+     * 报名人数
+     */
     @TableField(value = "total")
     private Integer total;
 
-    //活动时间
-    @TableField(value= "active_time")
+    /**
+     * 活动时间
+     */
+    @TableField(value = "active_time")
     private String activeTime;
 
-    //发布社团
+    /**
+     * 发布社团
+     */
     @TableField(value = "team_id")
     private String teamId;
 
     //状态
-    @TableField(value = "status")
-    private Integer status;
+    @TableField(value = "state")
+    private String state;
 
-    public Integer getStatus() {
-        return status;
+
+    public String getState() {
+        return state;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setState(String state) {
+        this.state = state;
     }
 
     public String getId() {
@@ -130,7 +148,7 @@ public class Activities implements Serializable {
                 ", total=" + total +
                 ", activeTime='" + activeTime + '\'' +
                 ", teamId='" + teamId + '\'' +
-                ", status=" + status +
+                ", state=" + state +
                 '}';
     }
 }

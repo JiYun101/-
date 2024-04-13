@@ -8,17 +8,16 @@ import com.msb.club_management.msg.PageData;
 import com.msb.club_management.service.MembersService;
 import com.msb.club_management.vo.Members;
 import com.msb.club_management.vo.Teams;
-import com.msb.club_management.vo.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
+import java.util.List;
 import java.util.Map;
 
 @Service("membersService")
-public class MembersImpl implements MembersService {
+public class MembersServiceImpl implements MembersService {
 
     @Autowired
     private MembersDao membersDao;
@@ -91,6 +90,12 @@ public class MembersImpl implements MembersService {
     public Members selectMembes(String id) {
         Members members = membersDao.selectById(id);
         return members;
+    }
+
+    @Override
+    public Integer selectMembers(String id,String teamId) {
+        Integer membersId=membersDao.selectMembersIdByUserId(id,teamId);
+        return membersId;
     }
 
 
