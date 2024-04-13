@@ -48,6 +48,7 @@ public interface PayLogsDao extends BaseMapper<PayLogs> {
                                                  @Param("teamName") String teamName,
                                                  @Param("userName") String userName);
 
+
     @Select("<script>" +
             "SELECT " +
             "pl.id, pl.create_time createTime, pl.total, pl.team_id teamId, pl.user_id userId, " +

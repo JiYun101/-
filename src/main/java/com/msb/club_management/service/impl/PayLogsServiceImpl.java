@@ -65,6 +65,7 @@ public class PayLogsServiceImpl implements PayLogsService {
         return parsePage(page);
     }
 
+
     /**
      * 转化分页查询的结果
      */

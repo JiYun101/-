@@ -20,6 +20,7 @@ public interface PayLogsService extends BaseService<PayLogs,String>{
      */
     public PageData getManPageInfo(Long pageIndex, Long pageSize, String userId, String teamName, String userName);
 
+
     /**
      * 分页查询缴费记录信息
      * @param pageIndex 当前页码

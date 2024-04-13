@@ -68,16 +68,7 @@ public class TeamsController extends BaseController {
         return R.successData(list);
     }
 
-    @GetMapping("/man")
-    @ResponseBody
-    public R getListByManId(String manId){
 
-        Log.info("获取指定社团管理员相关的社团列表");
-
-        List<Teams> list=teamsService.getListByManId(manId);
-
-        return R.successData(list);
-    }
 
     @GetMapping("/page")
     @ResponseBody
@@ -104,7 +95,6 @@ public class TeamsController extends BaseController {
         return R.successData(page);
     }
 
-
     /**
      * 根据团长ID获取社团信息
      */
@@ -118,7 +108,6 @@ public class TeamsController extends BaseController {
 
         return R.successData(list);
     }
-
 
     /**
      * 添加社团
