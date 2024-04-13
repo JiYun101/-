@@ -107,19 +107,6 @@ public class NoticesServiceImpl implements NoticesService {
         return parsePage(page);
     }
 
-    /**
-     * 添加通知信息
-     * @param notices
-     */
-   /* @Override
-    public  void addNotice(Notices notices) {
-        // 设置通知信息的创建时间为当前时间的字符串表示
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        notices.setCreateTime(sdf.format(new Date()));
-
-        // 调用 MyBatis-Plus 提供的通用 Mapper 保存通知信息到数据库
-        NoticesDao.insert(notices);
-    }*/
 
     /**
      * 查询列表结果转换

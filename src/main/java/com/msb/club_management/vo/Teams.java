@@ -51,9 +51,15 @@ public class Teams implements Serializable {
 	@TableField(value = "type_id")
 	private String typeId;
 
+	/**
+	 * 修改时间
+	 */
 	@TableField(value = "update_time")
 	private String updateTime;
 
+	/**
+	 * 状态
+	 */
 	@TableField(value = "state")
 	private String state;
 

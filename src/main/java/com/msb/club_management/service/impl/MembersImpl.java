@@ -69,12 +69,21 @@ public class MembersImpl implements MembersService {
         return parsePage(page);
     }
 
+    /**
+     * 检查指定用户是否为特定团队的经理。
+     *
+     * @param teamId 团队的唯一标识符。
+     * @param userId 用户的唯一标识符。
+     * @return 如果用户是该团队的经理则返回true，否则返回false。
+     */
     @Override
     public boolean isManager(String teamId, String userId) {
+        // 创建查询包装器并设置查询条件，查询指定teamId和manager为userId的团队记录
         QueryWrapper<Teams> qw = new QueryWrapper<Teams>();
         qw.eq("manager", userId);
         qw.eq("id", teamId);
 
+        // 根据查询条件查询记录数量，如果大于0则表示用户是该团队的经理
         return teamsDao.selectCount(qw) > 0;
     }
 

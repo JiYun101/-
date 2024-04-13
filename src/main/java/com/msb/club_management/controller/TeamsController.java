@@ -49,6 +49,13 @@ public class TeamsController extends BaseController {
         return "pages/Teams";
     }
 
+    @GetMapping("/info")
+    @ResponseBody
+    public R getInfo(String id){
+        Log.info("获取社团信息,ID：{}", id);
+        Teams teams= teamsService.getOne(id);
+        return R.successData(teams);
+    }
 
     @GetMapping("/all")
     @ResponseBody
@@ -60,6 +67,8 @@ public class TeamsController extends BaseController {
 
         return R.successData(list);
     }
+
+
 
     @GetMapping("/page")
     @ResponseBody
@@ -120,6 +129,38 @@ public class TeamsController extends BaseController {
         if (count==3){
             return R.error("该用户不存在！！");
         }
+        return R.success();
+    }
+
+    /**
+     * 修改社团信息
+     */
+    @PostMapping("/upd")
+    @ResponseBody
+    public R updateTeams(Teams teams){
+        teams.setUpdateTime(DateUtils.getNowDate("yyyy-MM-dd"));
+
+        Log.info("修改社团信息，参数：{}", teams);
+
+        int count=teamsService.updateTeams(teams);
+        if (count==0){
+            return R.error("更新社团信息失败！");
+        }
+        return R.success();
+    }
+
+    @PostMapping("/del")
+    @ResponseBody
+    public R deleteTeams(String id){
+
+        Log.info("删除社团信息，ID：{}", id);
+
+        //根据id查询要删除的社团数据
+        Teams teams=teamsService.getOne(id);
+        teams.setState("0");
+        //执行删除操作
+        teamsService.update(teams);
+
         return R.success();
     }
 }

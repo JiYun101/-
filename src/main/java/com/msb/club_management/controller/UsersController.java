@@ -141,8 +141,10 @@ public class UsersController extends BaseController {
         // 记录日志，打印更新用户信息的参数
         Log.info("修改系统用户，传入参数：{}", users);
         users.setUpdateTime(DateUtils.getNowDate());
+
         // 调用服务层方法，执行用户信息更新
         usersService.update(users);
+
         // 返回操作成功的标识
         return R.success();
     }

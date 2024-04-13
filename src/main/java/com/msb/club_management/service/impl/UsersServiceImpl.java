@@ -116,7 +116,7 @@ public class UsersServiceImpl implements UsersService {
         qw.orderByDesc("create_time");
 
         // 只查询状态为正常的用户
-        qw.like("status", 1);
+        qw.eq("status", 1);
 
         // 执行分页查询
         Page<Users> page =
