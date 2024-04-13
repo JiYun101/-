@@ -81,19 +81,10 @@ public class Users implements Serializable {
 	@TableField(value = "type")
 	private Integer type;
 
-	@TableField(value = "avatar")
-	private String avatar;
 
 	@TableField(value = "update_time")
 	private String updateTime;
 
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
 
 	public String getUpdateTime() {
 		return updateTime;
@@ -238,7 +229,6 @@ public class Users implements Serializable {
 				", status=" + status +
 				", createTime='" + createTime + '\'' +
 				", type=" + type +
-				", avatar='" + avatar + '\'' +
 				", updateTime='" + updateTime + '\'' +
 				'}';
 	}

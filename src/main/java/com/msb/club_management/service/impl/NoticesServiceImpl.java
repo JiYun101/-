@@ -29,7 +29,7 @@ public class NoticesServiceImpl implements NoticesService {
 	private TeamsDao teamsDao;
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void add(Notices notices) {
 
 
@@ -37,14 +37,14 @@ public class NoticesServiceImpl implements NoticesService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void update(Notices notices) {
 
         noticesDao.updateById(notices);
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void delete(Notices notices) {
 
         noticesDao.deleteById(notices);

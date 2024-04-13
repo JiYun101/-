@@ -89,6 +89,8 @@ public class TeamsController extends BaseController {
     /**
      * 根据团长ID获取社团信息
      */
+    @GetMapping("/man")
+    @ResponseBody
     public R getListByManId(String manId) {
 
         Log.info("根据团长ID获取社团信息，团长ID：{}", manId);
@@ -113,7 +115,10 @@ public class TeamsController extends BaseController {
 
         int count=teamsService.addTeams(teams);
         if (count==0){
-            return R.error("社团团长ID无效");
+            return R.error("添加失败！！");
+        }
+        if (count==3){
+            return R.error("该用户不存在！！");
         }
         return R.success();
     }
