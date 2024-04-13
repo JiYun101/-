@@ -45,6 +45,7 @@ public class TeamsServiceImpl implements TeamsService {
 
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void update(Teams teams) {
         teamsDao.updateById(teams);
     }
@@ -175,16 +176,23 @@ public PageData parsePage(Page<Teams> p) {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Integer addTeams(Teams teams) {
         // 查询团长id是否有效
-        Integer count = usersDao.selectCount(
-                new QueryWrapper<Users>().eq("id", teams.getManager()).eq("type", 1)
-        );
-        if(count == 0) {
+        Users users = usersDao.selectById(teams.getManager());
+        if (users==null){
+            return 3;
+        }
+        // 判断是否是团长，如果是普通用户，则修改为团长
+        if (users.getType() ==2){
+            users.setType(1);
+            usersDao.updateById(users);
+        }
+        //如果为管理员，则返回0
+        if(users.getType() ==0) {
             return 0;
         }
         teamsDao.insert(teams);
-
         Members member = new Members();
         member.setId(IDUtils.makeIDByCurrent());
         member.setUserId(teams.getManager());
@@ -197,6 +205,7 @@ public PageData parsePage(Page<Teams> p) {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public Integer updateTeams(Teams teams) {
         // 查询团长id是否有效
         Integer count = usersDao.selectCount(new QueryWrapper<Users>().eq("id", teams.getManager()).eq("type", 1)

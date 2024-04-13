@@ -30,21 +30,21 @@ public class UsersServiceImpl implements UsersService {
     private UsersDao usersDao;
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void add(Users users) {
 
         usersDao.insert(users);
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void update(Users users) {
 
         usersDao.updateById(users);
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void delete(Users users) {
 
         usersDao.deleteById(users);

@@ -68,6 +68,8 @@ public class TeamsController extends BaseController {
         return R.successData(list);
     }
 
+
+
     @GetMapping("/page")
     @ResponseBody
     public R getPageInfos(Long pageIndex, Long pageSize,
@@ -93,7 +95,6 @@ public class TeamsController extends BaseController {
         return R.successData(page);
     }
 
-
     /**
      * 根据团长ID获取社团信息
      */
@@ -107,7 +108,6 @@ public class TeamsController extends BaseController {
 
         return R.successData(list);
     }
-
 
     /**
      * 添加社团
@@ -124,7 +124,10 @@ public class TeamsController extends BaseController {
 
         int count=teamsService.addTeams(teams);
         if (count==0){
-            return R.error("社团团长ID无效");
+            return R.error("添加失败！！");
+        }
+        if (count==3){
+            return R.error("该用户不存在！！");
         }
         return R.success();
     }

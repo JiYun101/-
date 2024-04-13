@@ -37,14 +37,14 @@ public class ApplyLogsServiceImpl implements ApplyLogsService {
     private TeamsDao teamsDao;
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void add(ApplyLogs applyLogs) {
 
         applyLogsDao.insert(applyLogs);
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void update(ApplyLogs applyLogs) {
 
         if(applyLogs.getStatus() != null && applyLogs.getStatus() == 1){
@@ -66,7 +66,7 @@ public class ApplyLogsServiceImpl implements ApplyLogsService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.REQUIRED)
     public void delete(ApplyLogs applyLogs) {
 
         applyLogsDao.deleteById(applyLogs);

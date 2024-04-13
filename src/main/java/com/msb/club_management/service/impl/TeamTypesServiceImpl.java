@@ -32,11 +32,13 @@ public class TeamTypesServiceImpl implements TeamTypesService {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void update(TeamTypes teamTypes) {
         teamTypesDao.updateById(teamTypes);
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRED)
     public void delete(TeamTypes teamTypes) {
         teamTypesDao.deleteById(teamTypes);
     }

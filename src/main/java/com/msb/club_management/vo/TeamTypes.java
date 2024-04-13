@@ -28,8 +28,19 @@ public class TeamTypes implements Serializable {
     @TableField(value = "create_time")
     private String createTime;
 
+    @TableField(value = "update_time")
+    private String updateTime;
+
     @TableField(value = "state")
     private String state;
+
+    public String getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(String updateTime) {
+        this.updateTime = updateTime;
+    }
 
     public String getState() {
         return state;
@@ -69,6 +80,7 @@ public class TeamTypes implements Serializable {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", createTime='" + createTime + '\'' +
+                ", updateTime='" + updateTime + '\'' +
                 ", state='" + state + '\'' +
                 '}';
     }

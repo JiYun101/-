@@ -4,9 +4,12 @@ import com.msb.club_management.handle.CacheHandle;
 import com.msb.club_management.msg.PageData;
 import com.msb.club_management.msg.R;
 import com.msb.club_management.service.TeamTypesService;
+import com.msb.club_management.service.TeamsService;
 import com.msb.club_management.service.UsersService;
+import com.msb.club_management.utils.DateUtils;
 import com.msb.club_management.vo.TeamTypes;
 
+import com.msb.club_management.vo.Teams;
 import com.msb.club_management.vo.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -36,6 +40,11 @@ public class TeamTypesController extends BaseController{
 
     @Autowired
     private TeamTypesService teamTypesService;
+
+    @Autowired
+    private TeamsService teamsService;
+
+
 
     @RequestMapping("")
     public String index() {
@@ -73,5 +82,26 @@ public class TeamTypesController extends BaseController{
         PageData page = teamTypesService.getPageInfo(pageIndex, pageSize, teamTypes);
 
         return R.successData(page);
+    }
+
+    /**
+     * 更新团队类型信息
+     *
+     * @param teamTypes 团队类型对象，包含需要更新的团队类型信息
+     * @return 返回操作结果，成功则返回一个成功标志
+     */
+    @PostMapping("/upd")
+    @ResponseBody
+    public R updInfo(TeamTypes teamTypes) {
+        // 记录日志，打印更新团队类型的操作信息
+        Log.info("修改社团类型，传入参数：{}", teamTypes);
+
+        // 设置更新时间为当前时间
+        teamTypes.setUpdateTime(DateUtils.getNowDate());
+        // 调用服务层方法，执行更新操作
+        teamTypesService.update(teamTypes);
+
+        // 返回操作成功的标志
+        return R.success();
     }
 }
