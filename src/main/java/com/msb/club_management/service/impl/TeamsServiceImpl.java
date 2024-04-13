@@ -119,14 +119,26 @@ public PageData parsePage(Page<Teams> p) {
     return pageData;
 }
 
+    /**
+     * 根据管理员ID查询团队列表
+     */
 
+    /**
+     * 根据管理员ID获取团队列表。
+     * 该方法将查询数据库中与指定管理员ID关联的团队列表，并按创建时间降序排序。
+     *
+     * @param manId 管理员的ID，用于筛选出该管理员管理的团队。
+     * @return 返回一个团队列表，这些团队都由指定的管理员管理。
+     */
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public List<Teams> getListByManId(String manId) {
+        // 创建查询包装器，并设置查询条件为管理员ID等于传入的manId，以及按创建时间降序排序
         QueryWrapper<Teams> qw = new QueryWrapper<Teams>();
         qw.eq("manager", manId);
         qw.orderByDesc("create_time");
 
+        // 使用查询包装器执行数据库查询，并返回查询结果
         List<Teams> list = teamsDao.selectList(qw);
 
         return list;
@@ -154,6 +166,8 @@ public PageData parsePage(Page<Teams> p) {
 
         qw.orderByDesc("create_time");
 
+        qw.eq("state", "1");
+
         Page<Teams> page =
                 teamsDao.selectPage(new Page<Teams>(pageIndex, pageSize), qw);
 
@@ -176,6 +190,7 @@ public PageData parsePage(Page<Teams> p) {
         member.setUserId(teams.getManager());
         member.setTeamId(teams.getId());
         member.setCreateTime(DateUtils.getNowDate());
+        member.setState("1");
         membersDao.insert(member);
 
         return 1;
@@ -184,8 +199,7 @@ public PageData parsePage(Page<Teams> p) {
     @Override
     public Integer updateTeams(Teams teams) {
         // 查询团长id是否有效
-        Integer count = usersDao.selectCount(
-                new QueryWrapper<Users>().eq("id", teams.getManager()).eq("type", 1)
+        Integer count = usersDao.selectCount(new QueryWrapper<Users>().eq("id", teams.getManager()).eq("type", 1)
         );
         if(count == 0) {
             return 0;
