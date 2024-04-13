@@ -6,6 +6,7 @@ import com.msb.club_management.msg.PageData;
 import com.msb.club_management.msg.R;
 import com.msb.club_management.service.ActivitiesService;
 import com.msb.club_management.service.UsersService;
+import com.msb.club_management.vo.Activities;
 import com.msb.club_management.vo.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,20 +20,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/activities")
 public class ActivitiesController extends BaseController{
-    protected static final Logger Log = LoggerFactory.getLogger(ActivitiesController.class);
-
     @Autowired
     private ActivitiesService activitiesService;
 
+    @Autowired
+    private CacheHandle cacheHandle;
 
     @Autowired
     private UsersService usersService;
-    @Autowired
-    private CacheHandle cacheHandle;
+
+    protected static final Logger Log = LoggerFactory.getLogger(ActivitiesController.class);
+
     @RequestMapping("")
     public String index() {
 
         return "pages/Activities";
+    }
+
+    @GetMapping("/info")
+    @ResponseBody
+    public R getInfo(String id) {
+
+        Log.info("查找指定活动信息，ID：{}", id);
+
+        Activities activities = activitiesService.getOne(id);
+
+        return R.successData(activities);
     }
 
     @GetMapping("/page")
@@ -41,7 +54,7 @@ public class ActivitiesController extends BaseController{
                           String token, String teamName, String activeName) {
 
         Users user = usersService.getOne(cacheHandle.getUserInfoCache(token));
-        if(ObjectUtils.isEmpty(user)) {
+        if (ObjectUtils.isEmpty(user)) {
             return R.error("登录信息不存在，请重新登录");
         }
         if (user.getType() == 0) {
@@ -50,7 +63,7 @@ public class ActivitiesController extends BaseController{
                             + "每页数据量：{}, 模糊查询，社团名称：{}，活动名称：{}", pageIndex,
                     pageSize, teamName, activeName);
 
-            PageData page = activitiesService.getPageAll(pageIndex, pageSize, teamName, activeName);
+            PageData page = activitiesService.getPageAllActivities(pageIndex, pageSize, teamName, activeName);
 
             return R.successData(page);
         } else {
