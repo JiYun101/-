@@ -5,6 +5,8 @@ import com.msb.club_management.msg.PageData;
 import com.msb.club_management.vo.Members;
 import com.msb.club_management.vo.Users;
 
+import java.util.List;
+
 public interface MembersService extends BaseService<Members, String>{
 
     PageData getPageAll(Long pageIndex, Long pageSize, String teamName, String userName);
@@ -15,4 +17,6 @@ public interface MembersService extends BaseService<Members, String>{
     boolean isManager(String teamId, String userId);
 
     Members selectMembes(String id);
+
+    Integer selectMembers(String id, String teamId);
 }
