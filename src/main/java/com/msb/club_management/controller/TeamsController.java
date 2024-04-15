@@ -161,9 +161,19 @@ public class TeamsController extends BaseController {
         //根据id查询要删除的社团数据
         Teams teams=teamsService.getOne(id);
         teams.setState("0");
+        //查询当前社团的团长是否有两个或两个以上的社团
+        //如果只有1个，则判断团长是否还有其他社团
+        if (teamsService.getListByManId(teams.getManager()).size()>1){
+                //如果还有其他社团，则直接删除
+                teamsService.update(teams);
+            }else {
+                //如果只有1个社团，则把团长的类型改为2
+                Users user=usersService.getOne(teams.getManager());
+                user.setType(2);
+                usersService.update(user);
+                teamsService.update(teams);
+           }
         //执行删除操作
-        teamsService.update(teams);
-
         return R.success();
     }
 }
