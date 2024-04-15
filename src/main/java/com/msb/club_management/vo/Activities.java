@@ -43,15 +43,15 @@ public class Activities implements Serializable {
     private String teamId;
 
     //状态
-    @TableField(value = "status")
-    private Integer status;
+    @TableField(value = "state")
+    private Integer state;
 
-    public Integer getStatus() {
-        return status;
+    public Integer getState() {
+        return state;
     }
 
-    public void setStatus(Integer status) {
-        this.status = status;
+    public void setState(Integer state) {
+        this.state = state;
     }
 
     public String getId() {
@@ -118,7 +118,6 @@ public class Activities implements Serializable {
         this.teamId = teamId;
     }
 
-
     @Override
     public String toString() {
         return "Activities{" +
@@ -130,7 +129,7 @@ public class Activities implements Serializable {
                 ", total=" + total +
                 ", activeTime='" + activeTime + '\'' +
                 ", teamId='" + teamId + '\'' +
-                ", status=" + status +
+                ", state=" + state +
                 '}';
     }
 }

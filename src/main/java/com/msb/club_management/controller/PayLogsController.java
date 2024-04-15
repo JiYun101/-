@@ -7,6 +7,8 @@ import com.msb.club_management.msg.PageData;
 import com.msb.club_management.msg.R;
 import com.msb.club_management.service.PayLogsService;
 import com.msb.club_management.service.UsersService;
+import com.msb.club_management.utils.DateUtils;
+import com.msb.club_management.utils.IDUtils;
 import com.msb.club_management.vo.PayLogs;
 import com.msb.club_management.vo.Users;
 import org.apache.catalina.User;
@@ -16,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -43,6 +46,7 @@ public class PayLogsController extends BaseController{
         return "pages/PayLogs";
     }
 
+
     @GetMapping("/info")
     @ResponseBody
     public R getInfo(String id){
@@ -54,6 +58,19 @@ public class PayLogsController extends BaseController{
         return R.successData(payLogs);
     }
 
+    @PostMapping("/add")
+    @ResponseBody
+    public R addInfo(PayLogs payLogs){
+        //生成唯一的ID并设置给payLogs对象
+        payLogs.setId(IDUtils.makeIDByCurrent());
+
+        payLogs.setCreateTime(DateUtils.getNowDate());
+
+        Log.info("添加缴费记录，{}",payLogs);
+
+        payLogsService.add(payLogs);
+        return R.success();
+    }
 
     @GetMapping("/page")
     @ResponseBody
@@ -76,5 +93,4 @@ public class PayLogsController extends BaseController{
             return R.successData(page);
         }
     }
-
 }
