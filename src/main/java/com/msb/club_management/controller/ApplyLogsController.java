@@ -4,10 +4,12 @@ import com.msb.club_management.handle.CacheHandle;
 import com.msb.club_management.msg.PageData;
 import com.msb.club_management.msg.R;
 import com.msb.club_management.service.ApplyLogsService;
+import com.msb.club_management.service.MembersService;
 import com.msb.club_management.service.UsersService;
 import com.msb.club_management.utils.DateUtils;
 import com.msb.club_management.utils.IDUtils;
 import com.msb.club_management.vo.ApplyLogs;
+import com.msb.club_management.vo.Members;
 import com.msb.club_management.vo.Users;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +20,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 /**
  * 系统请求响应控制器
@@ -37,6 +41,9 @@ public class ApplyLogsController extends BaseController{
 
     @Autowired
     private ApplyLogsService applyLogsService;
+
+    @Autowired
+    private MembersService membersService;
 
     @RequestMapping("")
     public String index(){
@@ -109,6 +116,12 @@ public class ApplyLogsController extends BaseController{
     @ResponseBody
     public R addInfo(String token,ApplyLogs applyLogs){
         Users user=usersService.getOne(cacheHandle.getUserInfoCache(token));
+        String id = user.getId();
+        Integer i = membersService.selectMembers(id,applyLogs.getTeamId());
+
+        if (i>0){
+            return R.warn("你已经加入该团队，请勿重复申请");
+        }
         if (applyLogsService.isApply(user.getId(),applyLogs.getTeamId())){
             applyLogs.setId(IDUtils.makeIDByCurrent());
             applyLogs.setUserId(user.getId());
@@ -136,7 +149,8 @@ public class ApplyLogsController extends BaseController{
         Log.info("添加申请记录，传入参数：{}",applyLogs);
 
         applyLogs.setUpdateTime(DateUtils.getNowDate());
-        applyLogsService.update(applyLogs);
+
+        applyLogsService.updateApplyStatus(applyLogs);
 
         return R.success();
     }

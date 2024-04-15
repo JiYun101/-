@@ -7,6 +7,7 @@ import com.msb.club_management.service.TeamTypesService;
 import com.msb.club_management.service.TeamsService;
 import com.msb.club_management.service.UsersService;
 import com.msb.club_management.utils.DateUtils;
+import com.msb.club_management.utils.IDUtils;
 import com.msb.club_management.vo.TeamTypes;
 
 import com.msb.club_management.vo.Teams;
@@ -103,5 +104,41 @@ public class TeamTypesController extends BaseController{
 
         // 返回操作成功的标志
         return R.success();
+    }
+
+    @PostMapping("/add")
+    @ResponseBody
+    public R addInfo(TeamTypes teamTypes) {
+        Log.info("添加社团类型，传入参数：{}", teamTypes);
+        String name = teamTypes.getName();
+        TeamTypes teamTypes1 = teamTypesService.selectTeamTypesByName(name);
+        if (teamTypes1!=null){
+            return R.error("添加失败！已有该类型");
+        }
+        teamTypes.setCreateTime(DateUtils.getNowDate());
+        teamTypes.setUpdateTime(DateUtils.getNowDate());
+        teamTypes.setState("1");
+        teamTypes.setId(IDUtils.makeIDByCurrent());
+        teamTypesService.add(teamTypes);
+        return R.success();
+    }
+
+    @PostMapping("/del")
+    @ResponseBody
+    public R delInfo(String id) {
+        if(teamTypesService.isRemove(id)){
+
+            Log.info("删除社团类型, ID:{}", id);
+
+            TeamTypes teamTypes = teamTypesService.getOne(id);
+
+            teamTypes.setState("0");
+            teamTypesService.update(teamTypes);
+
+            return R.success();
+        }else{
+
+            return R.warn("存在关联社团，无法移除");
+        }
     }
 }

@@ -157,9 +157,7 @@ public class IndexController extends BaseController {
 
         // 记录修改用户信息的操作日志
         Log.info("修改用户信息，{}", user);
-
         user.setUpdateTime(DateUtils.getNowDate());
-        user.setPassWord(Md5Util.encode(user.getPassWord()));
         // 调用服务层方法，更新用户信息
         usersService.update(user);
         // 返回操作成功的响应

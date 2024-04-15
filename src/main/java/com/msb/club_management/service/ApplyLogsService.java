@@ -1,7 +1,11 @@
 package com.msb.club_management.service;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.msb.club_management.msg.PageData;
+import com.msb.club_management.msg.R;
 import com.msb.club_management.vo.ApplyLogs;
+
+import java.util.Map;
 
 public interface ApplyLogsService extends BaseService<ApplyLogs,String> {
 
@@ -34,4 +38,6 @@ public interface ApplyLogsService extends BaseService<ApplyLogs,String> {
      * @return
      */
     public PageData getPageInfo(Long pageIndex,Long pageSize,String userId,String teamName,String userName);
+
+    public R updateApplyStatus(ApplyLogs applyLogs);
 }

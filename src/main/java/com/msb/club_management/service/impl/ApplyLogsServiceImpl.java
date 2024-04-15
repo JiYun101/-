@@ -9,13 +9,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.msb.club_management.dao.ApplyLogsDao;
 import com.msb.club_management.dao.MembersDao;
 import com.msb.club_management.dao.TeamsDao;
+import com.msb.club_management.dao.UsersDao;
 import com.msb.club_management.msg.PageData;
+import com.msb.club_management.msg.R;
 import com.msb.club_management.service.ApplyLogsService;
 import com.msb.club_management.utils.DateUtils;
 import com.msb.club_management.utils.IDUtils;
 import com.msb.club_management.vo.ApplyLogs;
 import com.msb.club_management.vo.Members;
 import com.msb.club_management.vo.Teams;
+import com.msb.club_management.vo.Users;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +38,9 @@ public class ApplyLogsServiceImpl implements ApplyLogsService {
 
     @Autowired
     private TeamsDao teamsDao;
+
+    @Autowired
+    private UsersDao usersDao;
 
     @Override
     @Transactional(propagation = Propagation.REQUIRED)
@@ -111,6 +117,39 @@ public class ApplyLogsServiceImpl implements ApplyLogsService {
                 applyLogsDao.qryPageInfo(new Page<Map<String, Object>>(pageIndex, pageSize), userId, teamName, userName);
 
         return parsePage(page);
+    }
+
+    /**
+     * 更新申请状态
+     * @param applyLogs 申请日志对象，包含申请的详细信息
+     * @return 返回操作结果，如果操作成功，则返回成功的标识
+     */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public R updateApplyStatus(ApplyLogs applyLogs) {
+        // 更新申请日志信息
+        applyLogsDao.updateById(applyLogs);
+        // 根据申请日志中的团队ID查询团队信息
+        Teams teams = teamsDao.selectById(applyLogs.getTeamId());
+        // 如果申请状态为1（代表通过），则进行以下处理
+        if (applyLogs.getStatus() == 1){
+            // 创建一个新的成员对象，设置其状态为1，表示已通过申请
+            Members members=new Members();
+            members.setState("1");
+            members.setId(IDUtils.makeIDByCurrent());
+            members.setCreateTime(DateUtils.getNowDate());
+            members.setTeamId(applyLogs.getTeamId());
+            members.setUserId(applyLogs.getUserId());
+            // 将新成员插入到成员表中
+            membersDao.insert(members);
+            // 更新团队成员总数
+            teams.setTotal(teams.getTotal() + 1);
+            teamsDao.updateById(teams);
+            // 返回操作成功的标识
+            return R.success();
+        }
+        // 对于其他状态，直接返回操作成功的标识
+        return R.success();
     }
 
     /**

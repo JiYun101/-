@@ -7,7 +7,9 @@ import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +39,8 @@ public interface MembersDao extends BaseMapper<Members> {
             "<if test='userName != null and userName.trim() != &quot;&quot; '>" +
             "AND u.name LIKE CONCAT('%', #{userName}, '%') " +
             "</if>" +
-            "AND M.state=1"+
+            "AND M.state=1 "+
+            "AND t.state=1 "+
             "</where>" +
             "ORDER BY m.create_time DESC" +
             "</script>")
@@ -73,4 +76,7 @@ public interface MembersDao extends BaseMapper<Members> {
                                                     @Param("manId") String manId,
                                                     @Param("teamName") String teamName,
                                                     @Param("userName") String userName);
+
+    @Select("select count(1) from members where user_id = #{id} and team_id=#{teamId}")
+    Integer selectMembersIdByUserId(@Param("id") String id, @Param("teamId") String teamId);
 }

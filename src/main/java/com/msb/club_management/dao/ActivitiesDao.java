@@ -32,6 +32,7 @@ public interface ActivitiesDao extends BaseMapper<Activities> {
             "<if test='activeName != null and activeName.trim() != &quot;&quot; '>" +
             "AND a.name LIKE CONCAT('%', #{activeName}, '%') " +
             "</if>" +
+            "AND a.state = 1 "+
             "</where>" +
             "ORDER BY a.active_time DESC" +
             "</script>")
@@ -60,6 +61,7 @@ public interface ActivitiesDao extends BaseMapper<Activities> {
             "<if test='activeName != null and activeName.trim() != &quot;&quot; '>" +
             "AND a.name LIKE CONCAT('%', #{activeName}, '%') " +
             "</if>" +
+            "AND a.state=1 "+
             "</where>" +
             "ORDER BY a.active_time DESC" +
             "</script>")
