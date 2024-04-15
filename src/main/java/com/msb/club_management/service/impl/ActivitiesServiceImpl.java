@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.msb.club_management.dao.ActiveLogsDao;
 import com.msb.club_management.dao.ActivitiesDao;
 import com.msb.club_management.dao.TeamsDao;
-import com.msb.club_management.handle.CacheHandle;
 import com.msb.club_management.msg.PageData;
 import com.msb.club_management.service.ActivitiesService;
 import com.msb.club_management.utils.DateUtils;
@@ -76,6 +75,7 @@ public class ActivitiesServiceImpl implements ActivitiesService {
     }
 
     @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
     public Activities getOne(String id) {
         Activities activities = activitiesDao.selectById(id);
 
@@ -84,23 +84,12 @@ public class ActivitiesServiceImpl implements ActivitiesService {
 
     @Override
     @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PageData getPageAllActivities(Long pageIndex, Long pageSize, String activeName, String teamName) {
+    public PageData getPageAllActivities(Long pageIndex, Long pageSize,  String teamName ,String activeName) {
         Page<Map<String, Object>> page =
-                activitiesDao.qryPageAll(new Page<Map<String, Object>>(pageIndex, pageSize), activeName, teamName);
+                activitiesDao.qryPageAll(new Page<Map<String, Object>>(pageIndex, pageSize), teamName,activeName);
 
         return parsePage(page);
     }
-
-
-    @Override
-    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
-    public PageData getPageByUserId(Long pageIndex, Long pageSize, String userId, String activeName, String teamName) {
-        Page<Map<String, Object>> page =
-                activitiesDao.qryPageByMemId(new Page<Map<String, Object>>(pageIndex, pageSize), userId, activeName, teamName);
-
-        return parsePage(page);
-    }
-
 
     private PageData parsePage(Page<Map<String, Object>> page) {
     // 创建PageData对象，并使用Page对象的属性初始化
@@ -108,5 +97,17 @@ public class ActivitiesServiceImpl implements ActivitiesService {
 
         return pageData;
     }
+
+
+    @Override
+    @Transactional(readOnly = true, propagation = Propagation.SUPPORTS)
+    public PageData getPageByUserId(Long pageIndex, Long pageSize, String userId, String activeName, String teamName) {
+
+        Page<Map<String, Object>> page =
+                activitiesDao.qryPageByMemId(new Page<Map<String, Object>>(pageIndex, pageSize), userId, teamName, activeName);
+
+        return parsePage(page);
+    }
+
 
 }

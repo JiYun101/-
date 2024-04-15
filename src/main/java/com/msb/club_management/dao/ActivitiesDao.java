@@ -37,8 +37,8 @@ public interface ActivitiesDao extends BaseMapper<Activities> {
             "ORDER BY a.active_time DESC" +
             "</script>")
     public Page<Map<String, Object>> qryPageAll(Page<Map<String, Object>> page,
-                                                @Param("activeName") String activeName,
-                                                @Param("teamName") String teamName);
+                                                @Param("teamName") String teamName,
+                                                @Param("activeName") String activeName);
 
     /**
      * 分页查询指定成员相关的活动信息
