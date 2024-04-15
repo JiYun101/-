@@ -106,5 +106,16 @@ public class ActivitiesController extends BaseController{
         return R.success();
     }
 
+    @PostMapping("/del")
+    @ResponseBody
+    public R delInfo(String id){
+        Log.info("删除活动信息，传入参数：{}", id);
+
+        Activities activities = activitiesService.getOne(id);
+        activities.setState("0");
+        activitiesService.update(activities);
+
+        return R.success();
+    }
 
 }

@@ -44,13 +44,13 @@ public class Activities implements Serializable {
 
     //状态
     @TableField(value = "state")
-    private Integer state;
+    private String state;
 
-    public Integer getState() {
+    public String getState() {
         return state;
     }
 
-    public void setState(Integer state) {
+    public void setState(String state) {
         this.state = state;
     }
 
