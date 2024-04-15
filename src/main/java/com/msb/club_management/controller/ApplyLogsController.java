@@ -115,7 +115,9 @@ public class ApplyLogsController extends BaseController{
             applyLogs.setCreateTime(DateUtils.getNowDate());
             applyLogs.setUpdateTime(DateUtils.getNowDate());
             Log.info("添加申请记录，传入参数：{}",applyLogs);
+
             applyLogsService.add(applyLogs);
+
             return R.success();
         }else {
             return R.warn("申请审核中，请耐心等候");
