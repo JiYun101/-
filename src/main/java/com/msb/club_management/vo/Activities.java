@@ -9,6 +9,12 @@ import java.io.Serializable;
 @TableName(value = "activities")
 public class Activities implements Serializable {
 
+/**
+     * 序列化ID，用于版本控制。该字段为静态常量，值为1L。
+     * 在Java中，如果一个类实现了Serializable接口，那么就可以将该类的对象序列化。
+     * 序列化ID的作用是在反序列化时，确保反序列化的对象和序列化的对象是同一个版本。
+     */
+
     private static final long serialVersionUID = 1L;
 
     /**

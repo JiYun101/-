@@ -118,4 +118,15 @@ public class ActivitiesController extends BaseController{
         return R.success();
     }
 
+
+    @GetMapping("/upd")
+    @ResponseBody
+    public R add(Activities activities) {
+
+        Log.info("添加活动信息，ID：{}", activities.getId());
+
+        activitiesService.update(activities);
+
+        return R.success();
+    }
 }
