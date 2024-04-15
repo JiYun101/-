@@ -109,8 +109,15 @@ public PageData parsePage(Page<Teams> p) {
 
         // 查询团队类型信息，并添加到转换后的信息中
         TeamTypes teamTypes=teamTypesDao.selectById(teams.getTypeId());
-        temp.put("typeId",teams.getTypeId());
-        temp.put("typeName",teamTypes.getName());
+        // 检查teamTypes对象是否为null
+        if (teamTypes != null) {
+            temp.put("typeId", teams.getTypeId());
+            temp.put("typeName", teamTypes.getName());
+        } else {
+            // 处理teamTypes为null的情况
+            temp.put("typeId", teams.getTypeId());
+            temp.put("typeName", "");
+        }
         // 将转换后的信息添加到数据列表
         data.add(temp);
     }

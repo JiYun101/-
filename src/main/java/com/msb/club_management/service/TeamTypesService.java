@@ -15,4 +15,8 @@ public interface TeamTypesService extends BaseService<TeamTypes, String>{
 
     //分页查询社团类型信息
     public PageData getPageInfo(Long pageIndex, Long pageSize, TeamTypes teamTypes);
+
+    TeamTypes selectTeamTypesByName(String name);
+
+
 }
