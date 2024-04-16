@@ -47,6 +47,8 @@ public class ActiveLogsController extends BaseController{
     @ResponseBody
     public R getInfo(String id) {
 
+        Log.info("查找指定报名记录，ID：{}", id);
+
         ActiveLogs activeLogs = activeLogsService.getOne(id);
 
         return R.successData(activeLogs);
@@ -55,48 +57,52 @@ public class ActiveLogsController extends BaseController{
     @ResponseBody
     public R getList(String activeId) {
 
+        Log.info("获取指定活动的报名记录，活动ID：{}", activeId);
+
         List<Map<String, Object>> list = activeLogsService.getListByActiveId(activeId);
 
         return R.successData(list);
     }
 
+    /**
+     * 添加报名记录
+     * @param token
+     * @param activeLogs
+     * @return
+     */
     @PostMapping("/add")
     @ResponseBody
-    public R addInfo(String token, ActiveLogs activeLogs) {
-
-        Users user = usersService.getOne(cacheHandle.getUserInfoCache(token));
-
-        if(activeLogsService.isActive(activeLogs.getActiveId(), user.getId())){
-
+    public R addInfo(String token,ActiveLogs activeLogs){
+        Users user=usersService.getOne(cacheHandle.getUserInfoCache(token));
+        if (activeLogsService.isActive(activeLogs.getActiveId(),user.getId())){
             activeLogs.setId(IDUtils.makeIDByCurrent());
             activeLogs.setUserId(user.getId());
             activeLogs.setCreateTime(DateUtils.getNowDate());
+
+            Log.info("添加报名记录，传入参数：{}",activeLogs);
+
             activeLogsService.add(activeLogs);
 
             return R.success();
-        }else{
-
-            return R.warn("该活动您已参与，请勿重复报名");
+        }else {
+            return R.warn("该活动您以参与，请勿重复报名");
         }
     }
 
     @PostMapping("/upd")
     @ResponseBody
-    public R updInfo(ActiveLogs activeLogs) {
-
-
+    public R  updInfo(ActiveLogs activeLogs){
+        Log.info("修改报名记录，传入参数：{}",activeLogs);
         activeLogsService.update(activeLogs);
-
         return R.success();
     }
+
     @PostMapping("/del")
     @ResponseBody
-    public R delInfo(String id) {
-        ActiveLogs activeLogs = activeLogsService.getOne(id);
-
+    public R delInfo(String id){
+        Log.info("删除报名记录，ID：{}",id);
+        ActiveLogs activeLogs=activeLogsService.getOne(id);
         activeLogsService.delete(activeLogs);
-
         return R.success();
     }
-
 }

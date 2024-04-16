@@ -50,7 +50,7 @@
 
 
 
-        <table tableName="" domainObjectName=""
+        <table tableName="t_customer_serve" domainObjectName="CustomerServe"
                enableCountByExample="false" enableUpdateByExample="false"
                enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"></table>
 
