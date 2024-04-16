@@ -93,4 +93,12 @@ public class PayLogsController extends BaseController{
             return R.successData(page);
         }
     }
+
+    @PostMapping("del")
+    @ResponseBody
+    public R delInfo(String id){
+        Log.info("删除指定缴费记录，ID：{}",id);
+        payLogsService.delete(payLogsService.getOne(id));
+        return R.success();
+    }
 }
