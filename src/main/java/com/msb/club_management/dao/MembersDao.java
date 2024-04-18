@@ -70,6 +70,7 @@ public interface MembersDao extends BaseMapper<Members> {
             "AND u.name LIKE CONCAT('%', #{userName}, '%') " +
             "</if>" +
             "AND m.state =1 "+
+            "AND t.state =1 "+
             "</where>" +
             "ORDER BY m.create_time DESC" +
             "</script>")
