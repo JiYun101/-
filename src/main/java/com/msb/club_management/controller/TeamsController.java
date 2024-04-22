@@ -52,20 +52,33 @@ public class TeamsController extends BaseController {
     @GetMapping("/info")
     @ResponseBody
     public R getInfo(String id){
+        // 记录日志：获取指定ID的社团信息
         Log.info("获取社团信息,ID：{}", id);
+        // 从服务层获取指定ID的社团信息
         Teams teams= teamsService.getOne(id);
+        // 构建并返回操作成功的响应结果，包含获取到的社团信息
         return R.successData(teams);
+
     }
 
     @GetMapping("/all")
     @ResponseBody
     public R getAll(){
 
+        /**
+         * 获取全部的社团信息
+         *
+         * 参数: 无
+         * 返回值: 包含所有社团信息的列表
+         */
         Log.info("获取全部的社团");
 
+        // 从服务层获取所有社团的信息列表
         List<Teams> list = teamsService.getAllTeams();
 
+        // 返回操作成功的结果，并附带社团信息列表
         return R.successData(list);
+
     }
 
 
@@ -75,25 +88,38 @@ public class TeamsController extends BaseController {
     public R getPageInfos(Long pageIndex, Long pageSize,
                           String token, Teams teams) {
 
+        /**
+         * 根据用户token查询用户信息，并分页查询社团信息。
+         *
+         * @param token 用户的令牌，用于获取用户信息。
+         * @param pageIndex 当前页码，用于分页查询。
+         * @param pageSize 每页的数据量，用于分页查询。
+         * @return 返回查询结果，如果用户未登录返回错误信息，否则返回分页的社团信息。
+         */
         Users user = usersService.selectUser(cacheHandle.getUserInfoCache(token));
 
         // 验证用户信息是否存在
         if(ObjectUtils.isEmpty(user)) {
             return R.error("用户未登录！");
         }
+        // 如果用户类型为1，设置其为团队管理员
         if(user.getType() == 1){
 
             teams.setManager(user.getId());
         }
 
+        // 记录查询日志
         Log.info("分页查找社团信息，当前页码：{}，"
                         + "每页数据量：{}, 模糊查询，附加参数：{}", pageIndex,
                 pageSize, teams);
 
+        // 执行分页查询操作
         PageData page = teamsService.getPageInfo(pageIndex, pageSize, teams);
 
+        // 返回查询结果
         return R.successData(page);
     }
+
 
     /**
      * 根据团长ID获取社团信息
@@ -102,11 +128,15 @@ public class TeamsController extends BaseController {
     @ResponseBody
     public R getListByManId(String manId) {
 
+        // 记录日志：根据团长ID获取社团信息，团长ID为{manId}
         Log.info("根据团长ID获取社团信息，团长ID：{}", manId);
 
+        // 根据团长ID获取社团列表
         List<Teams> list = teamsService.getListByManId(manId);
 
+        // 返回获取到的社团列表信息
         return R.successData(list);
+
     }
 
     /**
@@ -116,20 +146,24 @@ public class TeamsController extends BaseController {
     @ResponseBody
     public R addTeams(Teams teams) {
 
-        teams.setId(IDUtils.makeIDByCurrent());
-        teams.setCreateTime(DateUtils.getNowDate("yyyy-MM-dd"));
-        teams.setState("1");
-        teams.setUpdateTime(DateUtils.getNowDate("yyyy-MM-dd"));
-        Log.info("添加社团信息，参数：{}", teams);
+        // 设置社团基本属性
+        teams.setId(IDUtils.makeIDByCurrent()); // 为社团设置唯一标识ID
+        teams.setCreateTime(DateUtils.getNowDate("yyyy-MM-dd")); // 设置创建时间为当前日期
+        teams.setState("1"); // 设置社团状态为1（通常表示正常或激活状态）
+        teams.setUpdateTime(DateUtils.getNowDate("yyyy-MM-dd")); // 设置更新时间为当前日期
+        Log.info("添加社团信息，参数：{}", teams); // 记录添加社团信息的日志
 
-        int count=teamsService.addTeams(teams);
+        // 尝试添加社团到数据库
+        int count=teamsService.addTeams(teams); // 添加社团到数据库
+        // 处理添加结果
         if (count==0){
-            return R.error("添加失败！！");
+            return R.error("添加失败！！"); // 添加失败，返回错误信息
         }
         if (count==3){
-            return R.error("该用户不存在！！");
+            return R.error("该用户不存在！！"); // 用户不存在，返回错误信息
         }
-        return R.success();
+        return R.success(); // 添加成功，返回成功信息
+
     }
 
     /**
@@ -138,18 +172,25 @@ public class TeamsController extends BaseController {
     @PostMapping("/upd")
     @ResponseBody
     public R updateTeams(Teams teams){
+        // 更新社团信息的更新时间
         teams.setUpdateTime(DateUtils.getNowDate("yyyy-MM-dd"));
 
+        // 记录日志，包括当前更新的社团信息
         Log.info("修改社团信息，参数：{}", teams);
 
+        // 调用服务层方法，更新社团信息
         int count=teamsService.updateTeams(teams);
+        // 更新失败处理
         if (count==0){
             return R.error("更新社团信息失败！");
         }
+        // 不存在该用户处理
         if (count==3){
             return R.error("该用户不存在！！");
         }
+        // 更新成功，返回成功信息
         return R.success();
+
     }
 
     @PostMapping("/del")

@@ -97,25 +97,41 @@ public class ActivitiesController extends BaseController{
     @ResponseBody
     public R addInfo(Activities activities) {
 
+        // 设置活动ID为当前时间戳生成的ID
         activities.setId(IDUtils.makeIDByCurrent());
 
+        // 记录日志，信息级别，记录添加活动信息时的参数
         Log.info("添加活动信息，传入参数：{}", activities);
 
+        // 调用活动服务，添加活动信息
         activitiesService.add(activities);
 
+        // 返回操作成功的响应
         return R.success();
+
     }
 
+    /**
+     * 删除活动信息。
+     * @param id 活动的唯一标识符。
+     * @return 返回操作成功的结果。
+     */
     @PostMapping("/del")
     @ResponseBody
     public R delInfo(String id){
+
         Log.info("删除活动信息，传入参数：{}", id);
 
+        // 根据ID获取活动信息，并将状态设置为"0"表示删除
         Activities activities = activitiesService.getOne(id);
         activities.setState("0");
+
+        // 更新活动状态为已删除
         activitiesService.update(activities);
 
+        // 返回操作成功的响应
         return R.success();
+
     }
 
 
@@ -123,10 +139,14 @@ public class ActivitiesController extends BaseController{
     @ResponseBody
     public R add(Activities activities) {
 
+        // 向日志系统记录一条信息，说明正在添加活动信息，并附带活动的ID
         Log.info("添加活动信息，ID：{}", activities.getId());
 
+        // 调用activitiesService的update方法，更新活动信息
         activitiesService.update(activities);
 
+        // 返回一个表示操作成功的响应对象
         return R.success();
+
     }
 }

@@ -165,9 +165,9 @@ public class UsersController extends BaseController {
             // 获取用户信息
             Users users = usersService.getOne(id);
             // 执行删除操作
-            users.setStatus(0);
-            users.setUpdateTime(DateUtils.getNowDate());
-            usersService.update(users);
+            users.setStatus(0); // 设置用户状态为0，具体含义根据业务逻辑而定
+            users.setUpdateTime(DateUtils.getNowDate());// 设置当前时间为用户信息的更新时间
+            usersService.update(users);// 调用服务层方法，将更新后的用户信息保存到数据库中
             // 返回删除成功的结果
             return R.success();
         }else{

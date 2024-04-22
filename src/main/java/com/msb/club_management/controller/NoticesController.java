@@ -38,6 +38,16 @@ public class NoticesController extends BaseController{
      */
     @GetMapping("/page")
     @ResponseBody
+    /**
+     * 根据用户信息和查询条件获取通知信息的分页数据。
+     *
+     * @param pageIndex 当前页码
+     * @param pageSize 每页的数据量
+     * @param token 用户的令牌，用于验证用户身份
+     * @param title 查询条件中的通知标题（模糊查询）
+     * @param teamName 查询条件中的社团名称（模糊查询）
+     * @return 返回一个结果对象，其中包含分页数据或错误信息
+     */
     public R getPageInfos(Long pageIndex, Long pageSize,String token, String title, String teamName) {
 
         Users user = usersService.getOne(cacheHandle.getUserInfoCache(token));
@@ -47,11 +57,12 @@ public class NoticesController extends BaseController{
             return R.error("用户未登录！");
         }
         if (user.getType()==0){
+            // 当用户类型为0时，查询活动通知
             Log.info("分页查找活动通知，当前页码：{}，每页数据量：{}, 模糊查询，标题：{}，社团名：{}", pageIndex, pageSize, title, teamName);
             PageData page=noticesService.getPageAll(pageIndex, pageSize, title, teamName);
             return R.successData(page);
         }else {
-
+            // 当用户类型不为0时，查询指定用户相关通知
             Log.info("分页查找指定用户相关通知记录，当前页码：{}，每页数据量：{}, 模糊查询，标题：{}，社团名：{}", pageIndex, pageSize, title, teamName);
 
             // 调用服务层方法，获取分页信息
@@ -62,6 +73,7 @@ public class NoticesController extends BaseController{
         }
     }
 
+
     /**
      * 添加通知信息
      *
@@ -70,15 +82,19 @@ public class NoticesController extends BaseController{
      */
     @PostMapping("/add")
     @ResponseBody
+    /**
+     * 添加一条通知信息。
+     * @param notices 通知对象，包含通知的详细信息。
+     * @return 返回操作结果，如果操作成功，则返回成功的标识。
+     */
     public R addNotice(Notices notices) {
-        // 生成通知的唯一标识
+        // 生成并设置通知的唯一标识
         notices.setId(IDUtils.makeIDByCurrent());
         // 设置通知的创建时间为当前时间
         notices.setCreateTime(DateUtils.getNowDate("yyyy-MM-dd"));
-        // 设置通知的状态为1（代表某种状态，具体含义根据业务逻辑定）
+        // 设置通知的状态为1（代表某种状态，具体含义根据业务逻辑定义）
         notices.setState("1");
-        // 检查notices对象中的teamId是否为空或空字符串
-        // 如果是，则将其设置为null
+        // 检查通知对象中的teamId是否为空或空字符串，如果是，则将其设置为null
         if(StringUtils.isNullOrEmpty(notices.getTeamId())){
 
             notices.setTeamId(null);
@@ -90,14 +106,20 @@ public class NoticesController extends BaseController{
         return R.success(); // 返回操作成功的标识
     }
 
+
     /**
      * 删除通知信息
+     * @param id 通知的唯一标识符
+     * @return 返回操作结果，成功则返回一个成功的标识
      */
     @PostMapping("/del")
     @ResponseBody
     public R delNotice(String id) {
+        // 根据id获取通知对象
         Notices notices = noticesService.getOne(id);
+        // 设置通知状态为已删除（0）
         notices.setState("0");
+        // 更新通知状态
         noticesService.update(notices);
 
         return R.success(); // 返回操作成功的标识

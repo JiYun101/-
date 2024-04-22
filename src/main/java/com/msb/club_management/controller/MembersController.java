@@ -61,7 +61,6 @@ public class MembersController extends BaseController{
             return R.error("用户未登录！");
         }
 
-
         // 根据用户类型来查询不同的页面数据
         if (user.getType()==0){
             // 查询所有成员的页面数据

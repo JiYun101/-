@@ -75,35 +75,54 @@ public class PayLogsController extends BaseController{
     @GetMapping("/page")
     @ResponseBody
     public R getPageInfos(Long pageIndex, Long pageSize, String token,String teamName,String userName){
+        /**
+         * 根据用户类型分页查询缴费记录。
+         * @param token 用户的令牌，用于获取用户信息。
+         * @param pageIndex 当前页码。
+         * @param pageSize 每页的数据量。
+         * @param teamName 查询条件中的团队名称，可模糊查询。
+         * @param userName 查询条件中的用户姓名，可模糊查询。
+         * @return 返回缴费记录的分页信息。
+         */
         Users user=usersService.getOne(cacheHandle.getUserInfoCache(token));
         if (ObjectUtils.isEmpty(user)){
+            // 如果用户信息不存在，则返回登录信息不存在的错误提示
             return R.error("登录信息不存在，请重新登陆");
         }
         if (user.getType()==0){
+            // 如果用户类型为0，查询全部缴费记录
             Log.info("分页查看全部缴费记录，当前页码：{}"+"每页数据量：{}，模糊查询，团队名称：{}，用户姓名：{}",pageIndex,pageSize,teamName,userName);
             PageData page=payLogsService.getPageInfo(pageIndex,pageSize,null,teamName,userName);
             return R.successData(page);
         }else if (user.getType()==1){
+            // 如果用户类型为1，查询团队管理员的缴费记录
             Log.info("团队管理员查看缴费记录，当前页码：{}，"+ "每页数据量：{}, 模糊查询，团队名称：{}，用户姓名：{}", pageIndex, pageSize, teamName, userName);
             PageData page=payLogsService.getManPageInfo(pageIndex,pageSize,user.getId(),teamName,userName);
             return R.successData(page);
         }else {
+            // 如果用户类型为其他，查询用户本人的缴费记录
             Log.info("分页用户相关缴费记录，当前页码：{}，"+ "每页数据量：{}, 模糊查询，团队名称：{}，用户姓名：{}", pageIndex, pageSize, teamName, userName);
             PageData page=payLogsService.getPageInfo(pageIndex,pageSize,user.getId(),teamName,null);
             return R.successData(page);
         }
+
     }
 
     @PostMapping("/del")
     @ResponseBody
     public R delInfo(String id) {
 
+        // 记录删除缴费记录的操作日志
         Log.info("删除缴费记录, ID:{}", id);
 
+        // 根据ID获取对应的缴费记录
         PayLogs payLogs = payLogsService.getOne(id);
 
+        // 执行删除操作
         payLogsService.delete(payLogs);
 
+        // 返回操作成功的响应
         return R.success();
+
     }
 }

@@ -107,35 +107,45 @@ public class ApplyLogsController extends BaseController{
     }
 
     /**
-     * 添加申请记录
-     * @param token
-     * @param applyLogs
-     * @return
+     * 添加申请信息
+     * @param token 用户的令牌，用于识别用户身份
+     * @param applyLogs 申请日志对象，包含申请加入团队的相关信息
+     * @return 返回一个结果对象，可能是成功提示、警告信息或错误信息
      */
     @PostMapping("/add")
     @ResponseBody
     public R addInfo(String token,ApplyLogs applyLogs){
+        // 根据token获取用户信息，并提取用户ID
         Users user=usersService.getOne(cacheHandle.getUserInfoCache(token));
         String id = user.getId();
+        // 检查该用户是否已经是申请团队的成员
         Integer i = membersService.selectMembers(id,applyLogs.getTeamId());
 
+        // 如果用户已经是团队成员，则返回警告信息
         if (i>0){
             return R.warn("你已经加入该团队，请勿重复申请");
         }
+        // 检查用户是否已经提交过加入申请
         if (applyLogsService.isApply(user.getId(),applyLogs.getTeamId())){
+            // 设置申请日志的ID、用户ID、创建时间和更新时间
             applyLogs.setId(IDUtils.makeIDByCurrent());
             applyLogs.setUserId(user.getId());
             applyLogs.setCreateTime(DateUtils.getNowDate());
             applyLogs.setUpdateTime(DateUtils.getNowDate());
+            // 记录申请日志信息
             Log.info("添加申请记录，传入参数：{}",applyLogs);
 
+            // 添加申请记录到数据库
             applyLogsService.add(applyLogs);
 
+            // 返回成功提示信息
             return R.success();
         }else {
+            // 如果用户已有申请正在审核中，则返回警告信息
             return R.warn("申请审核中，请耐心等候");
         }
     }
+
 
     /**
      * 修改申请记录

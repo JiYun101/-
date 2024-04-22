@@ -204,9 +204,9 @@ public class IndexController extends BaseController {
 
         // 根据token获取用户信息，并更新密码
         Users user = usersService.getOne(cacheHandle.getUserInfoCache(token));
-        user.setPassWord(Md5Util.encode(password));
-        user.setUpdateTime(DateUtils.getNowDate());
-        usersService.update(user);
+        user.setPassWord(Md5Util.encode(password)); // 设置加密后的密码
+        user.setUpdateTime(DateUtils.getNowDate()); // 设置当前时间为更新时间
+        usersService.update(user); // 调用服务更新用户信息
 
         // 返回操作成功的响应
         return R.success();
